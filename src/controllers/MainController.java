@@ -43,11 +43,11 @@ public class MainController implements Initializable {
     public void loadGenerateExam(ActionEvent e)
         throws IOException
     {
-        //this.stage = ((Stage)this.generateExamButton.getScene().getWindow());
-        //Parent root = (Parent)FXMLLoader.load(getClass().getResource("/application/.fxml"));
-        //Scene scene = new Scene(root);
-        //this.stage.setScene(scene);
-        //this.stage.show();
+        this.stage = ((Stage)this.generateExamButton.getScene().getWindow());
+        Parent root = (Parent)FXMLLoader.load(getClass().getResource("/application/generarExamen.fxml"));
+        Scene scene = new Scene(root);
+        this.stage.setScene(scene);
+        this.stage.show();
     }
     
     @FXML
