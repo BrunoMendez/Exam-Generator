@@ -5,8 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AgregarPreguntasController">
    <children>
       <Label layoutX="220.0" layoutY="21.0" text="Agregar Preguntas">
          <font>
@@ -80,7 +79,7 @@
          </font>
       </Label>
       <TextField layoutX="144.0" layoutY="378.0" prefHeight="25.0" prefWidth="374.0" />
-      <Button layoutX="553.0" layoutY="434.0" mnemonicParsing="false" text="Regresar" />
+      <Button fx:id="returnButton" layoutX="553.0" layoutY="434.0" mnemonicParsing="false" onAction="#goBack" text="Regresar" />
       <Button layoutX="632.0" layoutY="434.0" mnemonicParsing="false" text="Guardar" />
    </children>
 </AnchorPane>
