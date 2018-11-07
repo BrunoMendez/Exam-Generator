@@ -20,8 +20,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -38,9 +40,15 @@ public class AgregarPreguntasController implements Initializable {
     @FXML
     private Button returnButton;
     @FXML
-    private Button agregarOpcionButton;
+    private RadioButton opcion1;
     @FXML
-    private VBox opciones;
+    private RadioButton opcion2;
+    @FXML
+    private RadioButton opcion3;
+    @FXML
+    private RadioButton opcion4;
+    @FXML
+    private ComboBox<String> comboDificultad;
     
     // Materias
     @FXML
@@ -55,6 +63,10 @@ public class AgregarPreguntasController implements Initializable {
     ArrayList<String> temas = new ArrayList<>();
     private final ObservableList<String> temasOL = 
             FXCollections.observableArrayList(temas);
+    
+    
+    private final ObservableList<String> dificultad = 
+            FXCollections.observableArrayList("Facil", "Medio", "Dificil");
     
     @FXML
     private void goBack(ActionEvent event) 
@@ -107,6 +119,13 @@ public class AgregarPreguntasController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // TODO
+        ToggleGroup opciones = new ToggleGroup();
+        opcion1.setToggleGroup(opciones);
+        opcion2.setToggleGroup(opciones);
+        opcion3.setToggleGroup(opciones);
+        opcion4.setToggleGroup(opciones);
+        opciones.selectToggle(opcion1);
+        comboDificultad.setItems(dificultad);
     }
     
     
