@@ -121,7 +121,7 @@ public class dataBase{
         ex.printStackTrace();
       }
     }
-    public void addPregunta(String materia, String tema, int diff, String desc, String op1, String op2, String op3, String op4, String ans){
+    public void addPregunta(String materia, String tema, String diff, String desc, String op1, String op2, String op3, String op4, String ans){
         int id=0;
         try (
          // Step 1: Allocate a database 'Connection' object
@@ -142,7 +142,7 @@ public class dataBase{
             temaid = rset.getInt("temaID");
         }
         String sqlInsert = "insert into preguntas(descripcion,dificultad,materia_ID,tema_ID,o1,o2,o3,o4,ans) " // need a space
-               +"values ('"+desc+"',"+diff+","+id+","+temaid+",'"+op1+"','"+op2+"','"+op3+"','"+op4+"','"+ans+"')";
+               +"values ('"+desc+"','"+diff+"',"+id+","+temaid+",'"+op1+"','"+op2+"','"+op3+"','"+op4+"','"+ans+"')";
          int countInserted = stmt.executeUpdate(sqlInsert);
       }
       catch(SQLException ex){
@@ -244,7 +244,7 @@ public class dataBase{
         ex.printStackTrace();
       }
     }
-    public void updatePregunta(int id,String descripcion, String op1, String op2, String op3, String op4, String ans){
+    public void updatePregunta(int id,String descripcion, String op1, String op2, String op3, String op4, String ans, String diff){
         try (
          // Step 1: Allocate a database 'Connection' object
          Connection conn = DriverManager.getConnection(
@@ -254,7 +254,7 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-         String strUpdate = "update preguntas set descripcion ='"+descripcion+"',op1 ='"+op1+"',op2 ='"+op2+"',op3 ='"+op3+"',op4 ='"+op4+"',ans ='"+ans+"' where id ="+id;
+         String strUpdate = "update preguntas set descripcion ='"+descripcion+"', dificultad = '"+diff+"',op1 ='"+op1+"',op2 ='"+op2+"',op3 ='"+op3+"',op4 ='"+op4+"',ans ='"+ans+"' where id ="+id;
          int countUpdated = stmt.executeUpdate(strUpdate);
       }
       catch(SQLException ex){
