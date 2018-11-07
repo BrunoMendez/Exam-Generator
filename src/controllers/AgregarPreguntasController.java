@@ -105,6 +105,7 @@ public class AgregarPreguntasController implements Initializable {
             datos.addMateria(text);
             comboMaterias.setItems(materiasOL);
             comboMaterias.setEditable(false);
+            datos.addMateria(text);
         }
     }
     
