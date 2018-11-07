@@ -28,12 +28,12 @@ import javafx.stage.Stage;
  */
 public class GenerarExamenController implements Initializable {
     
+    public Stage stage = new Stage();
     @FXML
     private Label label;
     @FXML
-    private ComboBox materia;
-    @FXML
     private dataBase mydata;
+    private Button returnButton;
     
     @FXML
     private void handleButtonAction(ActionEvent event) {
@@ -44,6 +44,17 @@ public class GenerarExamenController implements Initializable {
     private void drop(ActionEvent event) {
         ArrayList<String> materias = mydata.getAllMaterias();
         System.out.println("si!");
+    }
+    
+    @FXML
+    private void goBack(ActionEvent event) 
+        throws IOException
+    {
+        this.stage = ((Stage)this.returnButton.getScene().getWindow());
+        Parent root = (Parent)FXMLLoader.load(getClass().getResource("/application/Main.fxml"));
+        Scene scene = new Scene(root);
+        this.stage.setScene(scene);
+        this.stage.show();
     }
     
     @Override
