@@ -14,11 +14,12 @@ import java.util.*;
  */
 public class dataBase{
     ArrayList<String> subj = new ArrayList<String>();
+    private static String address = "jdbc:mysql://localhost:3306/examenes?useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC";
+    
     public ArrayList<String> getAllMaterias(){
         try (
          // Step 1: Allocate a database 'Connection' object
-         Connection conn = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3306/examenes?useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC", "root", "proyecto");
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
                // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
  
          // Step 2: Allocate a 'Statement' object in the Connection
@@ -36,12 +37,11 @@ public class dataBase{
       }
       return subj;
     }
-    public ArrayList<String> getAllTemasP(String materia){
+    public ArrayList<String> getAllTemas(String materia){
         try (
          // Step 1: Allocate a database 'Connection' object
-         Connection conn = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3306/examenes?useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC", "root", "proyecto");
-               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+                // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
  
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
@@ -61,9 +61,8 @@ public class dataBase{
     public ArrayList<String> getAllDificultadP(String materia, String tema){
         try (
          // Step 1: Allocate a database 'Connection' object
-         Connection conn = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3306/examenes?useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC", "root", "proyecto");
-               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+                // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
  
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
@@ -83,8 +82,8 @@ public class dataBase{
     public void addMateria(String materia){
         try (
          // Step 1: Allocate a database 'Connection' object
-         Connection conn = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3306/examenes?useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC", "root", "proyecto");
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+
                // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
  
          // Step 2: Allocate a 'Statement' object in the Connection
@@ -102,9 +101,8 @@ public class dataBase{
         int id=0;
         try (
          // Step 1: Allocate a database 'Connection' object
-         Connection conn = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3306/examenes?useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC", "root", "proyecto");
-               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+                // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
  
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
@@ -125,9 +123,8 @@ public class dataBase{
         int id=0;
         try (
          // Step 1: Allocate a database 'Connection' object
-         Connection conn = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3306/examenes?useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC", "root", "proyecto");
-               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+                 Connection conn = DriverManager.getConnection(address,"root","proyecto");
+                // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
  
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
@@ -152,9 +149,8 @@ public class dataBase{
     public ArrayList<String> getAllMateriasP(){
         try (
          // Step 1: Allocate a database 'Connection' object
-         Connection conn = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3306/examenes?useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC", "root", "proyecto");
-               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+                // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
  
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
@@ -171,17 +167,16 @@ public class dataBase{
       }
       return subj;
     }
-    public ArrayList<String> getAllTemas(){
+    public ArrayList<String> getAllTemasP(String materia){
         try (
          // Step 1: Allocate a database 'Connection' object
-         Connection conn = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3306/examenes?useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC", "root", "proyecto");
-               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+                // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
  
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-        String state = "SELECT DISTINCT nombre FROM temas";
+        String state = "SELECT DISTINCT t.nombre FROM preguntas AS p INNER JOIN materias AS m INNER JOIN temas AS t ON t.materia_ID=m.materiaID ON p.materia_ID=m.materiaID WHERE m.nombre = '" + materia + "'";
         ResultSet rset = stmt.executeQuery(state);
         subj = new ArrayList<String>();
         while(rset.next()) {
@@ -196,9 +191,8 @@ public class dataBase{
     public void deleteMateria(String materia){
         try (
          // Step 1: Allocate a database 'Connection' object
-         Connection conn = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3306/examenes?useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC", "root", "proyecto");
-               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+                // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
  
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
@@ -213,9 +207,8 @@ public class dataBase{
     public void deleteTema(String tema){
         try (
          // Step 1: Allocate a database 'Connection' object
-         Connection conn = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3306/examenes?useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC", "root", "proyecto");
-               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+                // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
  
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
@@ -230,9 +223,8 @@ public class dataBase{
     public void deletePregunta(String descripcion){
         try (
          // Step 1: Allocate a database 'Connection' object
-         Connection conn = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3306/examenes?useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC", "root", "proyecto");
-               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+                // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
  
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
@@ -247,9 +239,8 @@ public class dataBase{
     public void updatePregunta(int id,String descripcion, String op1, String op2, String op3, String op4, String ans, String diff){
         try (
          // Step 1: Allocate a database 'Connection' object
-         Connection conn = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3306/examenes?useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC", "root", "proyecto");
-               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+                // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
  
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
@@ -265,9 +256,8 @@ public class dataBase{
         int id=0;
         try (
          // Step 1: Allocate a database 'Connection' object
-         Connection conn = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3306/examenes?useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC", "root", "proyecto");
-               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+                // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
  
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
@@ -287,9 +277,8 @@ public class dataBase{
         ArrayList<List<String>> preguntas = new ArrayList<List<String>>();         
         try (
          // Step 1: Allocate a database 'Connection' object
-         Connection conn = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3306/examenes?useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC", "root", "proyecto");
-               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+                // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
  
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();

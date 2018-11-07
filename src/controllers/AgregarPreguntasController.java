@@ -55,7 +55,7 @@ public class AgregarPreguntasController implements Initializable {
     // Materias
     @FXML
     private ComboBox<String> comboMaterias;
-    ArrayList<String> materias = new ArrayList();
+    ArrayList<String> materias = datos.getAllMaterias();
     private final ObservableList<String> materiasOL = 
             FXCollections.observableArrayList(materias);
     
@@ -104,6 +104,7 @@ public class AgregarPreguntasController implements Initializable {
             materiasOL.setAll(materias);
             comboMaterias.setItems(materiasOL);
             comboMaterias.setEditable(false);
+            datos.addMateria(text);
         }
     }
     
