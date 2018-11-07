@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import database.dataBase;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import javafx.stage.Stage;
  */
 public class AgregarPreguntasController implements Initializable {
     public Stage stage = new Stage();
+    public dataBase datos = new dataBase();
     @FXML
     private Button returnButton;
     @FXML
@@ -53,7 +55,7 @@ public class AgregarPreguntasController implements Initializable {
     // Materias
     @FXML
     private ComboBox<String> comboMaterias;
-    ArrayList<String> materias = new ArrayList<>();
+    ArrayList<String> materias = new ArrayList();
     private final ObservableList<String> materiasOL = 
             FXCollections.observableArrayList(materias);
     

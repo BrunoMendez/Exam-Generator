@@ -5,6 +5,9 @@
  */
 package controllers;
 
+import database.dataBase;
+import java.util.*;
+import application.Main;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -28,6 +32,7 @@ public class GenerarExamenController implements Initializable {
     @FXML
     private Label label;
     @FXML
+    private dataBase mydata;
     private Button returnButton;
     
     @FXML
@@ -35,9 +40,10 @@ public class GenerarExamenController implements Initializable {
         System.out.println("You clicked me!");
         label.setText("Mate");
     }
-    public final void DropMenu(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Mate");
+    @FXML
+    private void drop(ActionEvent event) {
+        ArrayList<String> materias = mydata.getAllMaterias();
+        System.out.println("si!");
     }
     
     @FXML
