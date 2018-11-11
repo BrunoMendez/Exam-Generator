@@ -21,7 +21,7 @@
          </font>
       </Label>
       <Button fx:id="returnButton" layoutX="553.0" layoutY="434.0" mnemonicParsing="false" onAction="#goBack" text="Regresar" />
-      <Button layoutX="632.0" layoutY="434.0" mnemonicParsing="false" text="Guardar" />
+      <Button layoutX="632.0" layoutY="434.0" mnemonicParsing="false" onAction="#guardarPregunta" text="Guardar" />
       <Label layoutX="25.0" layoutY="232.0" text="Indique las opciones y seleccione la correcta" />
       <HBox layoutX="25.0" layoutY="78.0" prefHeight="25.0" spacing="25.0" style="-fx-background-color: transparent;">
          <children>
@@ -92,7 +92,7 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <TextField prefHeight="25.0" prefWidth="553.0" />
+                              <TextField fx:id="textoOpcion1" prefHeight="25.0" prefWidth="553.0" />
                               <RadioButton fx:id="opcion1" mnemonicParsing="false">
                                  <HBox.margin>
                                     <Insets top="4.0" />
@@ -107,7 +107,7 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <TextField prefHeight="25.0" prefWidth="553.0" />
+                              <TextField fx:id="textoOpcion2" prefHeight="25.0" prefWidth="553.0" />
                               <RadioButton fx:id="opcion2" mnemonicParsing="false">
                                  <HBox.margin>
                                     <Insets top="4.0" />
@@ -122,7 +122,7 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <TextField prefHeight="25.0" prefWidth="553.0" />
+                              <TextField fx:id="textoOpcion3" prefHeight="25.0" prefWidth="553.0" />
                               <RadioButton fx:id="opcion3" mnemonicParsing="false">
                                  <HBox.margin>
                                     <Insets top="4.0" />
@@ -137,7 +137,7 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <TextField prefHeight="25.0" prefWidth="553.0" />
+                              <TextField fx:id="textoOpcion4" prefHeight="25.0" prefWidth="553.0" />
                               <RadioButton fx:id="opcion4" mnemonicParsing="false">
                                  <HBox.margin>
                                     <Insets top="4.0" />
@@ -164,7 +164,7 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextArea prefHeight="100.0" prefWidth="553.0" wrapText="true" />
+            <TextArea fx:id="pregunta" prefHeight="100.0" prefWidth="553.0" wrapText="true" />
          </children>
       </HBox>
    </children>

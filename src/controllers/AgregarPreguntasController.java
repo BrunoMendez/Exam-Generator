@@ -23,6 +23,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
@@ -51,6 +52,18 @@ public class AgregarPreguntasController implements Initializable {
     private RadioButton opcion4;
     @FXML
     private ComboBox<String> comboDificultad;
+    @FXML
+    private TextArea pregunta;
+    @FXML
+    private TextField textoOpcion1;
+    @FXML
+    private TextField textoOpcion2;
+    @FXML
+    private TextField textoOpcion3;
+    @FXML
+    private TextField textoOpcion4;
+    
+    private final ToggleGroup opciones = new ToggleGroup();
     
     // Materias
     @FXML
@@ -113,7 +126,8 @@ public class AgregarPreguntasController implements Initializable {
     private void loadTemas(ActionEvent e) 
             throws IOException
     {
-       
+       temas = datos.getAllTemas(comboMaterias.getValue());
+       temasOL.setAll(temas);
     }
     
     @FXML
@@ -122,22 +136,44 @@ public class AgregarPreguntasController implements Initializable {
         if (e.getCode() == KeyCode.ENTER) {
             String text = comboTemas.getEditor().getText();
             temas.add(text);
+            datos.addTema(comboMaterias.getValue(), text);
             temasOL.setAll(temas);
             comboTemas.setItems(temasOL);
             comboTemas.setEditable(false);
         }
     }
+    
+    @FXML
+    private void guardarPregunta(ActionEvent e)
+            throws IOException
+    {
+        String ans = "";
+        if (opciones.getSelectedToggle().equals(opcion1)) {
+            ans = textoOpcion1.getText();
+        } else if (opciones.getSelectedToggle().equals(opcion2)) {
+            ans = textoOpcion2.getText();
+        } else if (opciones.getSelectedToggle().equals(opcion3)) {
+            ans = textoOpcion3.getText();
+        } else if (opciones.getSelectedToggle().equals(opcion4)) {
+            ans = textoOpcion4.getText();
+        }
+        System.out.println(ans);
+        datos.addPregunta(comboMaterias.getValue(), comboTemas.getValue(),
+                comboDificultad.getValue(), pregunta.getText(), 
+                textoOpcion1.getText(), textoOpcion2.getText(), 
+                textoOpcion3.getText(), textoOpcion4.getText(), ans);
+    }
+    
+    
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // TODO
-        ToggleGroup opciones = new ToggleGroup();
         opcion1.setToggleGroup(opciones);
         opcion2.setToggleGroup(opciones);
         opcion3.setToggleGroup(opciones);
         opcion4.setToggleGroup(opciones);
         opciones.selectToggle(opcion1);
         comboDificultad.setItems(dificultad);
-    }
-    
-    
+    } 
 }
