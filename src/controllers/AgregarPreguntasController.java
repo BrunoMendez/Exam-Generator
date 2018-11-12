@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -28,6 +29,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -98,7 +100,10 @@ public class AgregarPreguntasController implements Initializable {
     private void editMaterias(ActionEvent event)
         throws IOException
     {
+        EventHandler<ActionEvent> handler = comboMaterias.getOnAction();
+        comboMaterias.setOnAction(null);
         this.comboMaterias.setEditable(true);
+        comboMaterias.setOnAction(handler);
     }
     
     @FXML
@@ -115,19 +120,28 @@ public class AgregarPreguntasController implements Initializable {
             String text = comboMaterias.getEditor().getText();
             materias.add(text);
             materiasOL.setAll(materias);
-            datos.addMateria(text);
             comboMaterias.setItems(materiasOL);
             comboMaterias.setEditable(false);
             datos.addMateria(text);
         }
     }
     
-    @FXML
+     @FXML
     private void loadTemas(ActionEvent e) 
             throws IOException
     {
-       temas = datos.getAllTemas(comboMaterias.getValue());
-       temasOL.setAll(temas);
+        if (!comboMaterias.isEditable()) {
+            temas = datos.getAllTemas(comboMaterias.getValue());
+            temasOL.setAll(temas);
+            comboTemas.setItems(temasOL);
+        } else if (comboMaterias.isEditable()) {
+            String text = comboMaterias.getEditor().getText();
+            materias.add(text);
+            materiasOL.setAll(materias);
+            comboMaterias.setItems(materiasOL);
+            comboMaterias.setEditable(false);
+            datos.addMateria(text);
+        }
     }
     
     @FXML
@@ -136,10 +150,10 @@ public class AgregarPreguntasController implements Initializable {
         if (e.getCode() == KeyCode.ENTER) {
             String text = comboTemas.getEditor().getText();
             temas.add(text);
-            datos.addTema(comboMaterias.getValue(), text);
             temasOL.setAll(temas);
             comboTemas.setItems(temasOL);
             comboTemas.setEditable(false);
+            datos.addTema(comboMaterias.getValue(), text);
         }
     }
     
@@ -169,6 +183,9 @@ public class AgregarPreguntasController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // TODO
+        materias = datos.getAllMaterias();
+        materiasOL.setAll(materias);
+        comboMaterias.setItems(materiasOL);
         opcion1.setToggleGroup(opciones);
         opcion2.setToggleGroup(opciones);
         opcion3.setToggleGroup(opciones);

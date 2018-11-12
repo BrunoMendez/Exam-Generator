@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class dataBase{
     ArrayList<String> subj = new ArrayList<String>();
-    private static String address = "jdbc:mysql://localhost:3306/examenes?useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC";
+    private static String address = "jdbc:mysql://b361d47572e6e4:79cf4cfa@us-cdbr-iron-east-01.cleardb.net/heroku_7c7b13c141a8cad?reconnect=true;useJDBCCompliantTimezoneShift=true;useLegacyDatetimeCode=false;serverTimezone=UTC";
     
     public ArrayList<String> getAllMaterias(){
         try (
