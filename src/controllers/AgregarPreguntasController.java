@@ -105,6 +105,8 @@ public class AgregarPreguntasController implements Initializable {
             comboMaterias.setItems(materiasOL);
             comboMaterias.setEditable(false);
             datos.addMateria(text);
+            datos.addTema("Matematicas", "Sumas");
+            datos.addPregunta("Matematicas", "Sumas", "Facil","Cuanto es 2+2?", "3", "2", "4", "Pez", "4");
         }
     }
     
