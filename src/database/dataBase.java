@@ -7,6 +7,7 @@ package database;
 import java.sql.*;
 import java.io.*;
 import java.util.*;
+import java.util.Random;
 
 /**
  *
@@ -273,7 +274,7 @@ public class dataBase{
       }
       return id;
     }
-        public ArrayList<List<String>> getPreguntas(String materia, String temas, int dificultad ){
+        public ArrayList<List<String>> getPreguntas(String materia, String temas, String dificultad ){
         ArrayList<List<String>> preguntas = new ArrayList<List<String>>();         
         try (
          // Step 1: Allocate a database 'Connection' object
@@ -293,7 +294,7 @@ public class dataBase{
         if(rset.next()){
             temaid = rset.getInt("temaID");
         }
-        String state = "SELECT descripcion,o1,o2,o3,o4,ans FROM preguntas WHERE materia_ID="+materiaid+" AND tema_ID="+temaid+" AND dificultad="+dificultad;
+        String state = "SELECT descripcion,o1,o2,o3,o4,ans FROM preguntas WHERE materia_ID="+materiaid+" AND tema_ID="+temaid+" AND dificultad= '"+dificultad+"'";
         rset = stmt.executeQuery(state);
         int i=0;
         while(rset.next()) {
@@ -311,5 +312,93 @@ public class dataBase{
         ex.printStackTrace();
       }
       return preguntas;
+    }
+    public ArrayList<List<String>> getAllExamenes(){
+        ArrayList<List<String>> examenes = new ArrayList<List<String>>();         
+        try (
+         // Step 1: Allocate a database 'Connection' object
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+ 
+         // Step 2: Allocate a 'Statement' object in the Connection
+         Statement stmt = conn.createStatement();
+      ){
+        String state = "SELECT * FROM examen";
+        ResultSet rset = stmt.executeQuery(state);
+        int i=0;
+        while(rset.next()) {
+           examenes.add(new ArrayList<String>());
+           int id = rset.getInt("examID");
+           String eID = Integer.toString(id);
+           examenes.get(i).add(eID);
+           examenes.get(i).add(rset.getString("nombre"));
+           examenes.get(i).add(rset.getString("dateOf"));
+           i++;
+        }
+      }
+      catch(SQLException ex){
+        ex.printStackTrace();
+      }
+      return examenes;
+    }
+    public void addExamen(String nombre, ArrayList<String> preg){
+        try (
+         // Step 1: Allocate a database 'Connection' object
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+ 
+         // Step 2: Allocate a 'Statement' object in the Connection
+         Statement stmt = conn.createStatement();
+      ){
+        Map<Integer,Boolean> ya = new HashMap<Integer,Boolean>();
+        for(int i=0; i<preg.size(); i++){
+            int id=0; 
+            String state = "SELECT examID FROM examen WHERE nombre = '"+nombre+"'";
+            ResultSet rset = stmt.executeQuery(state);
+            if(rset.next()){
+                id = rset.getInt("examId");
+            }
+            if(id == 0){
+                String sqlInsert = "INSERT INTO examen(dateof,nombre) values(CURDATE(),'"+nombre+"'";
+                int countInserted = stmt.executeUpdate(sqlInsert);
+                state = "SELECT examID FROM examen WHERE nombre = '"+nombre+"'";
+                rset = stmt.executeQuery(state);
+                if(rset.next()){
+                    id = rset.getInt("examID");
+                }
+                int preguntaID = getPreguntaID(preg.get(i));
+                sqlInsert = "INSERT INTO tiene(exam_ID,question_ID) values("+id+","+preguntaID+")";
+                countInserted = stmt.executeUpdate(sqlInsert);
+            }
+            else{
+                int preguntaID = getPreguntaID(preg.get(i));
+                String sqlInsert = "INSERT INTO tiene(exam_ID,question_ID) values("+id+","+preguntaID+")";
+                int countInserted = stmt.executeUpdate(sqlInsert);
+            }
+        }
+      }
+      catch(SQLException ex){
+        ex.printStackTrace();
+      }
+    }
+    public void getAllPreguntasE(int examen){
+        try (
+         // Step 1: Allocate a database 'Connection' object
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+ 
+         // Step 2: Allocate a 'Statement' object in the Connection
+         Statement stmt = conn.createStatement();
+      ){
+        String state = "SELECT p.descripcion FROM examen AS e INNER JOIN tiene AS t ON e.examID = t.exam_ID INNER JOIN preguntas AS p ON t.question_ID = p.ID WHERE e.examID = "+examen;
+        ResultSet rset = stmt.executeQuery(state);
+        subj = new ArrayList<String>();
+        while(rset.next()) {
+           subj.add(rset.getString("descripcion"));
+        }
+      }
+      catch(SQLException ex){
+        ex.printStackTrace();
+      }
     }
 }

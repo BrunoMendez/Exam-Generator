@@ -149,26 +149,11 @@ public class GenerarExamenController implements Initializable {
             throws IOException {
         for (ExamVariable examVariable : examVariableOL) {
             int cant = Integer.parseInt(examVariable.getCantidad());
-            int dificultad;
-            switch (examVariable.getDificultad()) {
-                case "facil":
-                    dificultad = 1;
-                    break;
-                case "medio":
-                    dificultad = 2;
-                    break;
-                case "dificil":
-                    dificultad = 3;
-                    break;
-                default:
-                    dificultad = 0;
-                    break;
-            }
-
+            
             // agarra las preguntas de la base de datos
             ArrayList<List<String>> allPreguntas
                     = datos.getPreguntas(examVariable.getMateria(),
-                            examVariable.getTema(), dificultad);
+                            examVariable.getTema(), examVariable.getDificultad());
             
             
             /// **** hasta aqui
