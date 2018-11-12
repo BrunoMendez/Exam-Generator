@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -23,10 +24,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -51,6 +54,18 @@ public class AgregarPreguntasController implements Initializable {
     private RadioButton opcion4;
     @FXML
     private ComboBox<String> comboDificultad;
+    @FXML
+    private TextArea pregunta;
+    @FXML
+    private TextField textoOpcion1;
+    @FXML
+    private TextField textoOpcion2;
+    @FXML
+    private TextField textoOpcion3;
+    @FXML
+    private TextField textoOpcion4;
+    
+    private final ToggleGroup opciones = new ToggleGroup();
     
     // Materias
     @FXML
@@ -85,7 +100,10 @@ public class AgregarPreguntasController implements Initializable {
     private void editMaterias(ActionEvent event)
         throws IOException
     {
+        EventHandler<ActionEvent> handler = comboMaterias.getOnAction();
+        comboMaterias.setOnAction(null);
         this.comboMaterias.setEditable(true);
+        comboMaterias.setOnAction(handler);
     }
     
     @FXML
@@ -110,6 +128,24 @@ public class AgregarPreguntasController implements Initializable {
         }
     }
     
+     @FXML
+    private void loadTemas(ActionEvent e) 
+            throws IOException
+    {
+        if (!comboMaterias.isEditable()) {
+            temas = datos.getAllTemas(comboMaterias.getValue());
+            temasOL.setAll(temas);
+            comboTemas.setItems(temasOL);
+        } else if (comboMaterias.isEditable()) {
+            String text = comboMaterias.getEditor().getText();
+            materias.add(text);
+            materiasOL.setAll(materias);
+            comboMaterias.setItems(materiasOL);
+            comboMaterias.setEditable(false);
+            datos.addMateria(text);
+        }
+    }
+    
     @FXML
     private void addTema(KeyEvent e)
     {
@@ -119,19 +155,44 @@ public class AgregarPreguntasController implements Initializable {
             temasOL.setAll(temas);
             comboTemas.setItems(temasOL);
             comboTemas.setEditable(false);
+            datos.addTema(comboMaterias.getValue(), text);
         }
     }
+    
+    @FXML
+    private void guardarPregunta(ActionEvent e)
+            throws IOException
+    {
+        String ans = "";
+        if (opciones.getSelectedToggle().equals(opcion1)) {
+            ans = textoOpcion1.getText();
+        } else if (opciones.getSelectedToggle().equals(opcion2)) {
+            ans = textoOpcion2.getText();
+        } else if (opciones.getSelectedToggle().equals(opcion3)) {
+            ans = textoOpcion3.getText();
+        } else if (opciones.getSelectedToggle().equals(opcion4)) {
+            ans = textoOpcion4.getText();
+        }
+        System.out.println(ans);
+        datos.addPregunta(comboMaterias.getValue(), comboTemas.getValue(),
+                comboDificultad.getValue(), pregunta.getText(), 
+                textoOpcion1.getText(), textoOpcion2.getText(), 
+                textoOpcion3.getText(), textoOpcion4.getText(), ans);
+    }
+    
+    
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // TODO
-        ToggleGroup opciones = new ToggleGroup();
+        materias = datos.getAllMaterias();
+        materiasOL.setAll(materias);
+        comboMaterias.setItems(materiasOL);
         opcion1.setToggleGroup(opciones);
         opcion2.setToggleGroup(opciones);
         opcion3.setToggleGroup(opciones);
         opcion4.setToggleGroup(opciones);
         opciones.selectToggle(opcion1);
         comboDificultad.setItems(dificultad);
-    }
-    
-    
+    } 
 }

@@ -7,10 +7,12 @@ package controllers;
 
 import database.dataBase;
 import java.util.*;
-import application.Main;
+import application.ExamVariable;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 /**
@@ -27,39 +30,178 @@ import javafx.stage.Stage;
  * @author hectorleon
  */
 public class GenerarExamenController implements Initializable {
-    
+
     public Stage stage = new Stage();
+    public dataBase datos = new dataBase();
+
     @FXML
-    private Label label;
-    @FXML
-    private dataBase mydata;
     private Button returnButton;
-    
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Mate");
+    private Button agregarPreguntaButton;
+    @FXML
+    private Button borrarButton;
+    @FXML
+    private TextField cantidad;
+    @FXML
+    private TextField examen;
+    @FXML
+    private Button addButton;
+    @FXML
+    private Button generarButton;
+
+    // Tabla
+    private final ObservableList<ExamVariable> examVariableOL
+            = FXCollections.observableArrayList();
+    @FXML
+    private TableView<ExamVariable> examVariableTable;
+    @FXML
+    private TableColumn<ExamVariable, String> materiaCol;
+    @FXML
+    private TableColumn<ExamVariable, String> temaCol;
+    @FXML
+    private TableColumn<ExamVariable, String> dificultadCol;
+    @FXML
+    private TableColumn<ExamVariable, String> cantidadCol;
+
+    // Preguntas para generar examenes
+    @FXML
+    private ListView preguntasAgregadas;
+    ArrayList<String> preguntas = new ArrayList<>();
+    private final ObservableList<String> preguntasOL
+            = FXCollections.observableArrayList(preguntas);
+
+    // Materias
+    @FXML
+    private ComboBox<String> comboMaterias;
+    ArrayList<String> materias = datos.getAllMateriasP();
+    private final ObservableList<String> materiasOL
+            = FXCollections.observableArrayList(materias);
+
+    //Temas
+    @FXML
+    private ComboBox<String> comboTemas;
+    ArrayList<String> temas = new ArrayList<>();
+    private final ObservableList<String> temasOL
+            = FXCollections.observableArrayList(temas);
+
+    //Dificultad
+    @FXML
+    private ComboBox<String> comboDificultades;
+    ArrayList<String> dificultades = new ArrayList<>();
+    private final ObservableList<String> dificultadesOL
+            = FXCollections.observableArrayList(temas);
+
+    @FXML
+    private void abrirAgregarPregunta(ActionEvent event)
+            throws IOException {
+        this.stage = ((Stage) this.agregarPreguntaButton.getScene().getWindow());
+        Parent root = (Parent) FXMLLoader.load(getClass().getResource("/application/agregarPreguntas.fxml"));
+        Scene scene = new Scene(root);
+        this.stage.setScene(scene);
+        this.stage.show();
+
     }
+
     @FXML
-    private void drop(ActionEvent event) {
-        ArrayList<String> materias = mydata.getAllMaterias();
-        System.out.println("si!");
+    private void loadTemas(ActionEvent e)
+            throws IOException {
+        temas = datos.getAllTemas(comboMaterias.getValue());
+        temasOL.setAll(temas);
+        comboTemas.setItems(temasOL);
     }
-    
+
     @FXML
-    private void goBack(ActionEvent event) 
-        throws IOException
-    {
-        this.stage = ((Stage)this.returnButton.getScene().getWindow());
-        Parent root = (Parent)FXMLLoader.load(getClass().getResource("/application/Main.fxml"));
+    private void loadDificultades(ActionEvent e)
+            throws IOException {
+        dificultades = datos.getAllDificultadP(comboMaterias.getValue(), comboTemas.getValue());
+        dificultadesOL.setAll(dificultades);
+        comboDificultades.setItems(dificultadesOL);
+    }
+
+    @FXML
+    private void goBack(ActionEvent event)
+            throws IOException {
+        this.stage = ((Stage) this.returnButton.getScene().getWindow());
+        Parent root = (Parent) FXMLLoader.load(getClass().getResource("/application/Main.fxml"));
         Scene scene = new Scene(root);
         this.stage.setScene(scene);
         this.stage.show();
     }
-    
+
+    @FXML
+    private void agregarPregunta(ActionEvent event)
+            throws IOException {
+        examVariableOL.add(new ExamVariable(comboMaterias.getValue(),
+                comboTemas.getValue(), comboDificultades.getValue(),
+                cantidad.getText()));
+        examVariableTable.setEditable(true);
+        examVariableTable.setItems(examVariableOL);
+    }
+
+    @FXML
+    private void deleteRow(ActionEvent event)
+            throws IOException {
+        examVariableOL.remove(examVariableTable.getSelectionModel().getSelectedItem());
+    }
+
+    @FXML
+    private void generarExamen(ActionEvent event)
+            throws IOException {
+        for (ExamVariable examVariable : examVariableOL) {
+            int cant = Integer.parseInt(examVariable.getCantidad());
+            int dificultad;
+            switch (examVariable.getDificultad()) {
+                case "facil":
+                    dificultad = 1;
+                    break;
+                case "medio":
+                    dificultad = 2;
+                    break;
+                case "dificil":
+                    dificultad = 3;
+                    break;
+                default:
+                    dificultad = 0;
+                    break;
+            }
+
+            // agarra las preguntas de la base de datos
+            ArrayList<List<String>> allPreguntas
+                    = datos.getPreguntas(examVariable.getMateria(),
+                            examVariable.getTema(), dificultad);
+            
+            
+            /// **** hasta aqui
+            if (allPreguntas.size() >= cant) {
+                // Saca la descripcion de las preguntas y las mete a una nueva lista
+                ArrayList<String> allPreguntasDesc = new ArrayList<>();
+                allPreguntas.forEach((pregunta) -> {
+                    allPreguntasDesc.add(pregunta.get(0));
+                });
+                // escoge de manera random preguntas, sin repeticiones
+                Random rand = new Random();
+                for (int i = 0; i < cant; i++) {
+                    int randomIndex = rand.nextInt(allPreguntasDesc.size());
+                    preguntas.add(allPreguntasDesc.get(randomIndex));
+                    allPreguntasDesc.remove(randomIndex);
+                }
+                // agrega preguntas a la lista
+                preguntasOL.setAll(preguntas);
+                preguntasAgregadas.setItems(preguntasOL);
+            }
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-    
+        materias = datos.getAllMaterias();
+        materiasOL.setAll(materias);
+        comboMaterias.setItems(materiasOL);
+        cantidad.setText("1");
+        this.materiaCol.setCellValueFactory(new PropertyValueFactory("materia"));
+        this.temaCol.setCellValueFactory(new PropertyValueFactory("tema"));
+        this.dificultadCol.setCellValueFactory(new PropertyValueFactory("dificultad"));
+        this.cantidadCol.setCellValueFactory(new PropertyValueFactory("cantidad"));
+    }
+
 }
