@@ -205,6 +205,22 @@ public class dataBase{
         ex.printStackTrace();
       }
     }
+    public void deleteExamen(int examenId){
+        try (
+         // Step 1: Allocate a database 'Connection' object
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+                // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+ 
+         // Step 2: Allocate a 'Statement' object in the Connection
+         Statement stmt = conn.createStatement();
+      ){
+         String sqlDelete = "delete from examen where examID="+examenId;
+         int countDeleted = stmt.executeUpdate(sqlDelete);
+      }
+      catch(SQLException ex){
+        ex.printStackTrace();
+      }
+    }
     public void deleteTema(String tema){
         try (
          // Step 1: Allocate a database 'Connection' object
@@ -263,10 +279,10 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-        String state = "SELECT descripcion FROM preguntas WHERE descripcion = '"+descripcion+"'";
+        String state = "SELECT ID FROM preguntas WHERE descripcion = '"+descripcion+"'";
         ResultSet rset = stmt.executeQuery(state);
         if(rset.next()){
-            id = rset.getInt("materiaID");
+            id = rset.getInt("ID");
         }
       }
       catch(SQLException ex){
@@ -274,7 +290,7 @@ public class dataBase{
       }
       return id;
     }
-        public ArrayList<List<String>> getPreguntas(String materia, String temas, String dificultad ){
+        public ArrayList<List<String>> getPreguntas(String materia, String temas, String dificultad){
         ArrayList<List<String>> preguntas = new ArrayList<List<String>>();         
         try (
          // Step 1: Allocate a database 'Connection' object
@@ -350,7 +366,6 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-        Map<Integer,Boolean> ya = new HashMap<Integer,Boolean>();
         for(int i=0; i<preg.size(); i++){
             int id=0; 
             String state = "SELECT examID FROM examen WHERE nombre = '"+nombre+"'";
@@ -359,7 +374,7 @@ public class dataBase{
                 id = rset.getInt("examId");
             }
             if(id == 0){
-                String sqlInsert = "INSERT INTO examen(dateof,nombre) values(CURDATE(),'"+nombre+"'";
+                String sqlInsert = "INSERT INTO examen(dateof,nombre) values(CURDATE(),'"+nombre+"')";
                 int countInserted = stmt.executeUpdate(sqlInsert);
                 state = "SELECT examID FROM examen WHERE nombre = '"+nombre+"'";
                 rset = stmt.executeQuery(state);
@@ -381,7 +396,8 @@ public class dataBase{
         ex.printStackTrace();
       }
     }
-    public void getAllPreguntasE(int examen){
+    public ArrayList<List<String>> getAllPreguntasE(int examen){
+        ArrayList<List<String>> preguntas = new ArrayList<List<String>>();
         try (
          // Step 1: Allocate a database 'Connection' object
          Connection conn = DriverManager.getConnection(address,"root","proyecto");
@@ -390,15 +406,23 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-        String state = "SELECT p.descripcion FROM examen AS e INNER JOIN tiene AS t ON e.examID = t.exam_ID INNER JOIN preguntas AS p ON t.question_ID = p.ID WHERE e.examID = "+examen;
+        String state = "SELECT p.descripcion,p.o1,p.o2,p.o3,p.o4,p.ans FROM examen AS e INNER JOIN tiene AS t ON e.examID = t.exam_ID INNER JOIN preguntas AS p ON t.question_ID = p.ID WHERE e.examID = "+examen;
         ResultSet rset = stmt.executeQuery(state);
-        subj = new ArrayList<String>();
+        int i=0;
         while(rset.next()) {
-           subj.add(rset.getString("descripcion"));
+           preguntas.add(new ArrayList<String>());
+           preguntas.get(i).add(rset.getString("descripcion"));
+           preguntas.get(i).add(rset.getString("o1"));
+           preguntas.get(i).add(rset.getString("o2"));
+           preguntas.get(i).add(rset.getString("o3"));
+           preguntas.get(i).add(rset.getString("o4"));
+           preguntas.get(i).add(rset.getString("ans"));
+           i++;
         }
       }
       catch(SQLException ex){
         ex.printStackTrace();
       }
+        return preguntas;
     }
 }
