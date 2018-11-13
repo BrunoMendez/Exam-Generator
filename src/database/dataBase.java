@@ -387,7 +387,7 @@ public class dataBase{
         ex.printStackTrace();
       }
     }
-    public ArrayList<List<String>> getAllPreguntasE(int examen){
+    public ArrayList<List<String>> getAllPreguntasE(String examen){
         ArrayList<List<String>> preguntas = new ArrayList<List<String>>();
         try (
          // Step 1: Allocate a database 'Connection' object
@@ -397,7 +397,7 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-        String state = "SELECT p.descripcion,p.o1,p.o2,p.o3,p.o4,p.ans FROM examen AS e INNER JOIN tiene AS t ON e.examID = t.exam_ID INNER JOIN preguntas AS p ON t.question_ID = p.ID WHERE e.examID = "+examen;
+        String state = "SELECT p.descripcion,p.o1,p.o2,p.o3,p.o4,p.ans FROM examen AS e INNER JOIN tiene AS t ON e.examID = t.exam_ID INNER JOIN preguntas AS p ON t.question_ID = p.ID WHERE e.nombre = '"+examen+"'";
         ResultSet rset = stmt.executeQuery(state);
         int i=0;
         while(rset.next()) {
