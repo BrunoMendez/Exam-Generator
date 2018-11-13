@@ -59,7 +59,7 @@ public class dataBase{
       }
       return subj;
     }
-    public ArrayList<String> getAllDificultadP(String materia, String tema){
+    public ArrayList<String> getAllDificultadP(String tema){
         try (
          // Step 1: Allocate a database 'Connection' object
          Connection conn = DriverManager.getConnection(address,"root","proyecto");
@@ -68,7 +68,7 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-        String state = "SELECT DISTINCT p.dificultad FROM preguntas AS p INNER JOIN materias AS m ON p.materia_ID=m.materiaID INNER JOIN temas AS t ON t.materia_ID=m.materiaID WHERE m.nombre = '" + materia + "' AND t.nombre = '"+tema+"'";
+        String state = "SELECT DISTINCT p.dificultad FROM preguntas AS p INNER JOIN temas AS t ON p.tema_ID=t.temaId Where t.nombre = '"+tema+"'";
         ResultSet rset = stmt.executeQuery(state);
         subj = new ArrayList<String>();
         while(rset.next()) {
@@ -120,7 +120,7 @@ public class dataBase{
         ex.printStackTrace();
       }
     }
-    public void addPregunta(String materia, String tema, String diff, String desc, String op1, String op2, String op3, String op4, String ans){
+    public void addPregunta(String tema, String diff, String desc, String op1, String op2, String op3, String op4, String ans){
         int id=0;
         try (
          // Step 1: Allocate a database 'Connection' object
@@ -130,17 +130,13 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-        ResultSet rset = stmt.executeQuery("SELECT materiaID FROM materias WHERE nombre='"+materia+"'");
-        if(rset.next()){
-            id = rset.getInt("materiaID");
-        }
-        rset = stmt.executeQuery("SELECT temaID FROM temas WHERE nombre='"+tema+"'");
+        ResultSet rset = stmt.executeQuery("SELECT temaID FROM temas WHERE nombre='"+tema+"'");
         int temaid=0;
         if(rset.next()){
             temaid = rset.getInt("temaID");
         }
-        String sqlInsert = "insert into preguntas(descripcion,dificultad,materia_ID,tema_ID,o1,o2,o3,o4,ans) " // need a space
-               +"values ('"+desc+"','"+diff+"',"+id+","+temaid+",'"+op1+"','"+op2+"','"+op3+"','"+op4+"','"+ans+"')";
+        String sqlInsert = "insert into preguntas(descripcion,dificultad,tema_ID,o1,o2,o3,o4,ans) " // need a space
+               +"values ('"+desc+"','"+diff+"',"+temaid+",'"+op1+"','"+op2+"','"+op3+"','"+op4+"','"+ans+"')";
          int countInserted = stmt.executeUpdate(sqlInsert);
       }
       catch(SQLException ex){
@@ -290,7 +286,7 @@ public class dataBase{
       }
       return id;
     }
-        public ArrayList<List<String>> getPreguntas(String materia, String temas, String dificultad){
+        public ArrayList<List<String>> getPreguntas(String temas, String dificultad){
         ArrayList<List<String>> preguntas = new ArrayList<List<String>>();         
         try (
          // Step 1: Allocate a database 'Connection' object
@@ -300,17 +296,12 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-        ResultSet rset = stmt.executeQuery("SELECT materiaID FROM materias WHERE nombre='"+materia+"'");
-        int materiaid =0;
         int temaid=0;
-        if(rset.next()){
-            materiaid = rset.getInt("materiaID");
-        }
-        rset = stmt.executeQuery("SELECT temaID FROM temas WHERE nombre='"+temas+"'");
+        ResultSet rset = stmt.executeQuery("SELECT temaID FROM temas WHERE nombre='"+temas+"'");
         if(rset.next()){
             temaid = rset.getInt("temaID");
         }
-        String state = "SELECT descripcion,o1,o2,o3,o4,ans FROM preguntas WHERE materia_ID="+materiaid+" AND tema_ID="+temaid+" AND dificultad= '"+dificultad+"'";
+        String state = "SELECT descripcion,o1,o2,o3,o4,ans FROM preguntas WHERE tema_ID="+temaid+" AND dificultad= '"+dificultad+"'";
         rset = stmt.executeQuery(state);
         int i=0;
         while(rset.next()) {
@@ -340,34 +331,6 @@ public class dataBase{
          Statement stmt = conn.createStatement();
       ){
         String state = "SELECT * FROM examen";
-        ResultSet rset = stmt.executeQuery(state);
-        int i=0;
-        while(rset.next()) {
-           examenes.add(new ArrayList<String>());
-           int id = rset.getInt("examID");
-           String eID = Integer.toString(id);
-           examenes.get(i).add(eID);
-           examenes.get(i).add(rset.getString("nombre"));
-           examenes.get(i).add(rset.getString("dateOf"));
-           i++;
-        }
-      }
-      catch(SQLException ex){
-        ex.printStackTrace();
-      }
-      return examenes;
-    }
-    public ArrayList<List<String>> getExamen(String examen){
-        ArrayList<List<String>> examenes = new ArrayList<List<String>>();         
-        try (
-         // Step 1: Allocate a database 'Connection' object
-         Connection conn = DriverManager.getConnection(address,"root","proyecto");
-               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
- 
-         // Step 2: Allocate a 'Statement' object in the Connection
-         Statement stmt = conn.createStatement();
-      ){
-        String state = "SELECT * FROM examen where nombre = '"+examen+"'";
         ResultSet rset = stmt.executeQuery(state);
         int i=0;
         while(rset.next()) {
