@@ -120,7 +120,7 @@ public class dataBase{
         ex.printStackTrace();
       }
     }
-    public void addPregunta(String tema, String diff, String desc, String op1, String op2, String op3, String op4, String ans){
+    public void addPregunta(String tema, String diff, String desc, String op1, String op2, String op3, String op4, String ans,String tipo){
         int id=0;
         try (
          // Step 1: Allocate a database 'Connection' object
@@ -135,8 +135,8 @@ public class dataBase{
         if(rset.next()){
             temaid = rset.getInt("temaID");
         }
-        String sqlInsert = "insert into preguntas(descripcion,dificultad,tema_ID,o1,o2,o3,o4,ans) " // need a space
-               +"values ('"+desc+"','"+diff+"',"+temaid+",'"+op1+"','"+op2+"','"+op3+"','"+op4+"','"+ans+"')";
+        String sqlInsert = "insert into preguntas(descripcion,dificultad,tema_ID,o1,o2,o3,o4,ans,tipo) " // need a space
+               +"values ('"+desc+"','"+diff+"',"+temaid+",'"+op1+"','"+op2+"','"+op3+"','"+op4+"','"+ans+"','"+tipo+"')";
          int countInserted = stmt.executeUpdate(sqlInsert);
       }
       catch(SQLException ex){
@@ -249,7 +249,7 @@ public class dataBase{
         ex.printStackTrace();
       }
     }
-    public void updatePregunta(int id,String descripcion, String op1, String op2, String op3, String op4, String ans, String diff){
+    public void updatePregunta(int id,String descripcion, String op1, String op2, String op3, String op4, String ans, String diff, String tipo){
         try (
          // Step 1: Allocate a database 'Connection' object
          Connection conn = DriverManager.getConnection(address,"root","proyecto");
@@ -258,7 +258,7 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-         String strUpdate = "update preguntas set descripcion ='"+descripcion+"', dificultad = '"+diff+"',op1 ='"+op1+"',op2 ='"+op2+"',op3 ='"+op3+"',op4 ='"+op4+"',ans ='"+ans+"' where id ="+id;
+         String strUpdate = "update preguntas set descripcion ='"+descripcion+"', dificultad = '"+diff+"',op1 ='"+op1+"',op2 ='"+op2+"',op3 ='"+op3+"',op4 ='"+op4+"',ans ='"+ans+"',tipo ='"+tipo+"' where id ="+id;
          int countUpdated = stmt.executeUpdate(strUpdate);
       }
       catch(SQLException ex){
@@ -286,7 +286,7 @@ public class dataBase{
       }
       return id;
     }
-        public ArrayList<List<String>> getPreguntas(String temas, String dificultad){
+    public ArrayList<List<String>> getPreguntas(String temas, String dificultad,String tipo){
         ArrayList<List<String>> preguntas = new ArrayList<List<String>>();         
         try (
          // Step 1: Allocate a database 'Connection' object
@@ -301,7 +301,7 @@ public class dataBase{
         if(rset.next()){
             temaid = rset.getInt("temaID");
         }
-        String state = "SELECT descripcion,o1,o2,o3,o4,ans FROM preguntas WHERE tema_ID="+temaid+" AND dificultad= '"+dificultad+"'";
+        String state = "SELECT descripcion,o1,o2,o3,o4,ans FROM preguntas WHERE tema_ID="+temaid+" AND dificultad= '"+dificultad+"' AND tipo = '"+tipo+"'";
         rset = stmt.executeQuery(state);
         int i=0;
         while(rset.next()) {
@@ -397,7 +397,7 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-        String state = "SELECT p.descripcion,p.o1,p.o2,p.o3,p.o4,p.ans FROM examen AS e INNER JOIN tiene AS t ON e.examID = t.exam_ID INNER JOIN preguntas AS p ON t.question_ID = p.ID WHERE e.nombre = '"+examen+"'";
+        String state = "SELECT p.descripcion,p.o1,p.o2,p.o3,p.o4,p.ans,p.tipo FROM examen AS e INNER JOIN tiene AS t ON e.examID = t.exam_ID INNER JOIN preguntas AS p ON t.question_ID = p.ID WHERE e.nombre = '"+examen+"'";
         ResultSet rset = stmt.executeQuery(state);
         int i=0;
         while(rset.next()) {
@@ -408,6 +408,7 @@ public class dataBase{
            preguntas.get(i).add(rset.getString("o3"));
            preguntas.get(i).add(rset.getString("o4"));
            preguntas.get(i).add(rset.getString("ans"));
+           preguntas.get(i).add(rset.getString("tipo"));
            i++;
         }
       }
@@ -415,5 +416,26 @@ public class dataBase{
         ex.printStackTrace();
       }
         return preguntas;
+    }
+    public ArrayList<String> getAllTipoP(String tema,String dificultad){
+        try (
+         // Step 1: Allocate a database 'Connection' object
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+                // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+ 
+         // Step 2: Allocate a 'Statement' object in the Connection
+         Statement stmt = conn.createStatement();
+      ){
+        String state = "SELECT DISTINCT p.tipo FROM preguntas AS p INNER JOIN temas AS t ON p.tema_ID=t.temaId Where t.nombre = '"+tema+"' AND p.dificultad = '"+dificultad+"'";
+        ResultSet rset = stmt.executeQuery(state);
+        subj = new ArrayList<String>();
+        while(rset.next()) {
+           subj.add(rset.getString("tipo"));
+        }
+      }
+      catch(SQLException ex){
+        ex.printStackTrace();
+      }
+      return subj;
     }
 }

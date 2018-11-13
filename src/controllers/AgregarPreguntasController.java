@@ -53,6 +53,10 @@ public class AgregarPreguntasController implements Initializable {
     @FXML
     private RadioButton opcion4;
     @FXML
+    private RadioButton tipo1;
+    @FXML
+    private RadioButton tipo2;
+    @FXML
     private ComboBox<String> comboDificultad;
     @FXML
     private TextArea pregunta;
@@ -64,8 +68,13 @@ public class AgregarPreguntasController implements Initializable {
     private TextField textoOpcion3;
     @FXML
     private TextField textoOpcion4;
+    @FXML
+    private Label textoTipo1;
+    @FXML
+    private Label textoTipo2;
     
     private final ToggleGroup opciones = new ToggleGroup();
+    private final ToggleGroup tipo = new ToggleGroup();
     
     // Materias
     @FXML
@@ -123,8 +132,6 @@ public class AgregarPreguntasController implements Initializable {
             comboMaterias.setItems(materiasOL);
             comboMaterias.setEditable(false);
             datos.addMateria(text);
-            datos.addTema("Matematicas", "Sumas");
-            datos.addPregunta("Sumas", "Facil","Cuanto es 2+2?", "3", "2", "4", "Pez", "4");
         }
     }
     
@@ -164,6 +171,7 @@ public class AgregarPreguntasController implements Initializable {
             throws IOException
     {
         String ans = "";
+        String stipo = "";
         if (opciones.getSelectedToggle().equals(opcion1)) {
             ans = textoOpcion1.getText();
         } else if (opciones.getSelectedToggle().equals(opcion2)) {
@@ -173,11 +181,16 @@ public class AgregarPreguntasController implements Initializable {
         } else if (opciones.getSelectedToggle().equals(opcion4)) {
             ans = textoOpcion4.getText();
         }
+        if (tipo.getSelectedToggle().equals(tipo1)) {
+            stipo = textoTipo1.getText();
+        } else if (tipo.getSelectedToggle().equals(tipo2)) {
+            stipo = textoTipo2.getText();
+        }
         System.out.println(ans);
         datos.addPregunta(comboTemas.getValue(),
                 comboDificultad.getValue(), pregunta.getText(), 
                 textoOpcion1.getText(), textoOpcion2.getText(), 
-                textoOpcion3.getText(), textoOpcion4.getText(), ans);
+                textoOpcion3.getText(), textoOpcion4.getText(), ans,stipo);
     }
     
     
@@ -193,6 +206,9 @@ public class AgregarPreguntasController implements Initializable {
         opcion3.setToggleGroup(opciones);
         opcion4.setToggleGroup(opciones);
         opciones.selectToggle(opcion1);
+        tipo1.setToggleGroup(tipo);
+        tipo2.setToggleGroup(tipo);
+        tipo.selectToggle(tipo1);
         comboDificultad.setItems(dificultad);
-    } 
+    }
 }

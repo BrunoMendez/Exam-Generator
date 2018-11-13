@@ -8,13 +8,15 @@ public class ExamVariable
   private final SimpleStringProperty tema;
   private final SimpleStringProperty dificultad;
   private final SimpleStringProperty cantidad;
+  private final SimpleStringProperty tipo;
   
-  public ExamVariable(String sMateria, String sTema, String sDificultad, String sCantidad)
+  public ExamVariable(String sMateria, String sTema, String sDificultad, String sCantidad, String sTipo)
   {
     this.materia = new SimpleStringProperty(sMateria);
     this.tema = new SimpleStringProperty(sTema);
     this.dificultad = new SimpleStringProperty(sDificultad);
     this.cantidad = new SimpleStringProperty(sCantidad);
+    this.tipo = new SimpleStringProperty(sTipo);
   }
   
   public String getMateria()
@@ -36,6 +38,10 @@ public class ExamVariable
   {
     return this.cantidad.get();
   }
+   public String getTipo()
+  {
+    return this.tipo.get();
+  }
   
   
   public void setMateria(String nMateria)
@@ -56,5 +62,9 @@ public class ExamVariable
   public void setCantidad(String nCantidad)
   {
     this.cantidad.set(nCantidad);
+  }
+  public void setTipo(String nTipo)
+  {
+    this.tipo.set(nTipo);
   }
 }

@@ -62,6 +62,9 @@ public class GenerarExamenController implements Initializable {
     private TableColumn<ExamVariable, String> dificultadCol;
     @FXML
     private TableColumn<ExamVariable, String> cantidadCol;
+    @FXML
+    private TableColumn<ExamVariable, String> tipoCol;
+
 
     // Preguntas para generar examenes
     @FXML
@@ -87,7 +90,13 @@ public class GenerarExamenController implements Initializable {
     ArrayList<String> dificultades = new ArrayList<>();
     private final ObservableList<String> dificultadesOL
             = FXCollections.observableArrayList(dificultades);
-
+    //Tipo
+    @FXML
+    private ComboBox<String> comboTipo;
+    ArrayList<String> tipo = new ArrayList<>();
+    private final ObservableList<String> tipoOL
+            = FXCollections.observableArrayList(tipo);
+    
     @FXML
     private void abrirAgregarPregunta(ActionEvent event)
             throws IOException {
@@ -116,6 +125,15 @@ public class GenerarExamenController implements Initializable {
         System.out.println(dificultadesOL.toString());
         comboDificultades.setItems(dificultadesOL);
     }
+    @FXML
+    private void loadTipo(ActionEvent e)
+            throws IOException {
+        tipo = datos.getAllTipoP(comboTemas.getValue(),comboDificultades.getValue());
+        System.out.println(tipo.toString());
+        tipoOL.setAll(tipo);
+        System.out.println(tipoOL.toString());
+        comboTipo.setItems(tipoOL);
+    }
 
     @FXML
     private void goBack(ActionEvent event)
@@ -132,7 +150,7 @@ public class GenerarExamenController implements Initializable {
             throws IOException {
         examVariableOL.add(new ExamVariable(comboMaterias.getValue(),
                 comboTemas.getValue(), comboDificultades.getValue(),
-                cantidad.getText()));
+                cantidad.getText(),comboTipo.getValue()));
         examVariableTable.setEditable(true);
         examVariableTable.setItems(examVariableOL);
     }
@@ -151,7 +169,7 @@ public class GenerarExamenController implements Initializable {
             
             // agarra las preguntas de la base de datos
             ArrayList<List<String>> allPreguntas
-                    = datos.getPreguntas(examVariable.getTema(), examVariable.getDificultad());
+                    = datos.getPreguntas(examVariable.getTema(), examVariable.getDificultad(),"");
             
             /// **** hasta aqui
             
@@ -185,6 +203,7 @@ public class GenerarExamenController implements Initializable {
         this.temaCol.setCellValueFactory(new PropertyValueFactory("tema"));
         this.dificultadCol.setCellValueFactory(new PropertyValueFactory("dificultad"));
         this.cantidadCol.setCellValueFactory(new PropertyValueFactory("cantidad"));
+        this.tipoCol.setCellValueFactory(new PropertyValueFactory("tipo"));
     }
 
 }
