@@ -417,6 +417,34 @@ public class dataBase{
       }
         return preguntas;
     }
+    public ArrayList<List<String>> getExamen(String examen){
+        ArrayList<List<String>> examenes = new ArrayList<List<String>>();         
+        try (
+         // Step 1: Allocate a database 'Connection' object
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+ 
+         // Step 2: Allocate a 'Statement' object in the Connection
+         Statement stmt = conn.createStatement();
+      ){
+        String state = "SELECT * FROM examen where nombre = '"+examen+"'";
+        ResultSet rset = stmt.executeQuery(state);
+        int i=0;
+        while(rset.next()) {
+           examenes.add(new ArrayList<String>());
+           int id = rset.getInt("examID");
+           String eID = Integer.toString(id);
+           examenes.get(i).add(eID);
+           examenes.get(i).add(rset.getString("nombre"));
+           examenes.get(i).add(rset.getString("dateOf"));
+           i++;
+        }
+      }
+      catch(SQLException ex){
+        ex.printStackTrace();
+      }
+      return examenes;
+    }
     public ArrayList<String> getAllTipoP(String tema,String dificultad){
         try (
          // Step 1: Allocate a database 'Connection' object

@@ -120,9 +120,7 @@ public class GenerarExamenController implements Initializable {
     private void loadDificultades(ActionEvent e)
             throws IOException {
         dificultades = datos.getAllDificultadP(comboTemas.getValue());
-        System.out.println(dificultades.toString());
         dificultadesOL.setAll(dificultades);
-        System.out.println(dificultadesOL.toString());
         comboDificultades.setItems(dificultadesOL);
     }
     @FXML
