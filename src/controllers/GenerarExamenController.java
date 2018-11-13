@@ -153,7 +153,6 @@ public class GenerarExamenController implements Initializable {
             ArrayList<List<String>> allPreguntas
                     = datos.getPreguntas(examVariable.getTema(), examVariable.getDificultad());
             
-            
             /// **** hasta aqui
             
             

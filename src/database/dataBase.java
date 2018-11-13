@@ -152,7 +152,7 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-        String state = "SELECT DISTINCT m.nombre FROM preguntas AS p INNER JOIN materias AS m ON p.materia_ID=m.materiaID";
+        String state = "SELECT DISTINCT m.nombre FROM preguntas AS p INNER JOIN temas AS t ON p.tema_ID=t.temaId INNER JOIN materias AS m ON t.materia_ID = m.materiaID";
         ResultSet rset = stmt.executeQuery(state);
         subj = new ArrayList<String>();
         while(rset.next()) {
@@ -173,7 +173,7 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-        String state = "SELECT DISTINCT t.nombre FROM preguntas AS p INNER JOIN materias AS m ON p.materia_ID=m.materiaID INNER JOIN temas AS t ON t.materia_ID=m.materiaID WHERE m.nombre = '" + materia + "'";
+        String state = "SELECT DISTINCT t.nombre FROM preguntas AS p INNER JOIN temas AS t ON p.tema_ID=t.temaId INNER JOIN materias AS m ON t.materia_ID = m.materiaID WHERE m.nombre = '"+materia+"'";
         ResultSet rset = stmt.executeQuery(state);
         subj = new ArrayList<String>();
         while(rset.next()) {
