@@ -65,10 +65,7 @@ public class GenerarExamenController implements Initializable {
 
     // Preguntas para generar examenes
     @FXML
-    private ListView preguntasAgregadas;
     ArrayList<String> preguntas = new ArrayList<>();
-    private final ObservableList<String> preguntasOL
-            = FXCollections.observableArrayList(preguntas);
 
     // Materias
     @FXML
@@ -89,7 +86,7 @@ public class GenerarExamenController implements Initializable {
     private ComboBox<String> comboDificultades;
     ArrayList<String> dificultades = new ArrayList<>();
     private final ObservableList<String> dificultadesOL
-            = FXCollections.observableArrayList(temas);
+            = FXCollections.observableArrayList(dificultades);
 
     @FXML
     private void abrirAgregarPregunta(ActionEvent event)
@@ -114,7 +111,9 @@ public class GenerarExamenController implements Initializable {
     private void loadDificultades(ActionEvent e)
             throws IOException {
         dificultades = datos.getAllDificultadP(comboMaterias.getValue(), comboTemas.getValue());
+        System.out.println(dificultades.toString());
         dificultadesOL.setAll(dificultades);
+        System.out.println(dificultadesOL.toString());
         comboDificultades.setItems(dificultadesOL);
     }
 
@@ -157,6 +156,8 @@ public class GenerarExamenController implements Initializable {
             
             
             /// **** hasta aqui
+            
+            
             if (allPreguntas.size() >= cant) {
                 // Saca la descripcion de las preguntas y las mete a una nueva lista
                 ArrayList<String> allPreguntasDesc = new ArrayList<>();
@@ -170,9 +171,8 @@ public class GenerarExamenController implements Initializable {
                     preguntas.add(allPreguntasDesc.get(randomIndex));
                     allPreguntasDesc.remove(randomIndex);
                 }
-                // agrega preguntas a la lista
-                preguntasOL.setAll(preguntas);
-                preguntasAgregadas.setItems(preguntasOL);
+                datos.addExamen(examen.getText(), preguntas);
+                System.out.println(datos.getAllExamenes().toString());
             }
         }
     }
