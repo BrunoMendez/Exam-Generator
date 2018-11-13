@@ -58,7 +58,7 @@ public class BajarExamenesController implements Initializable {
         selectedValue = (String) FxUtilTest.getComboBoxValue(comboExamenes);
         String fileName = selectedValue + ".txt";
         File file = new File(fileName);
-        preguntas = datos.getAllPreguntasE(71);
+        preguntas = datos.getAllPreguntasE(selectedValue);
         FileWriter fileWriter;
         fileWriter = new FileWriter(file);
         try (PrintWriter printWriter = new PrintWriter(fileWriter)) {

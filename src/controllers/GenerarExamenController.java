@@ -110,7 +110,7 @@ public class GenerarExamenController implements Initializable {
     @FXML
     private void loadDificultades(ActionEvent e)
             throws IOException {
-        dificultades = datos.getAllDificultadP(comboMaterias.getValue(), comboTemas.getValue());
+        dificultades = datos.getAllDificultadP(comboTemas.getValue());
         dificultadesOL.setAll(dificultades);
         comboDificultades.setItems(dificultadesOL);
     }
@@ -149,9 +149,7 @@ public class GenerarExamenController implements Initializable {
             
             // agarra las preguntas de la base de datos
             ArrayList<List<String>> allPreguntas
-                    = datos.getPreguntas(examVariable.getMateria(),
-                            examVariable.getTema(), examVariable.getDificultad());
-            
+                    = datos.getPreguntas(examVariable.getTema(), examVariable.getDificultad());
             
             /// **** hasta aqui
             

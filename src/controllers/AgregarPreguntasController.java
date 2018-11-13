@@ -124,7 +124,7 @@ public class AgregarPreguntasController implements Initializable {
             comboMaterias.setEditable(false);
             datos.addMateria(text);
             datos.addTema("Matematicas", "Sumas");
-            datos.addPregunta("Matematicas", "Sumas", "Facil","Cuanto es 2+2?", "3", "2", "4", "Pez", "4");
+            datos.addPregunta("Sumas", "Facil","Cuanto es 2+2?", "3", "2", "4", "Pez", "4");
         }
     }
     
@@ -174,7 +174,7 @@ public class AgregarPreguntasController implements Initializable {
             ans = textoOpcion4.getText();
         }
         System.out.println(ans);
-        datos.addPregunta(comboMaterias.getValue(), comboTemas.getValue(),
+        datos.addPregunta(comboTemas.getValue(),
                 comboDificultad.getValue(), pregunta.getText(), 
                 textoOpcion1.getText(), textoOpcion2.getText(), 
                 textoOpcion3.getText(), textoOpcion4.getText(), ans);

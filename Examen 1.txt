@@ -1,23 +1,15 @@
 		Examen 1
 
-Encuentra el valor de "x":
-x^2+4x+4=0
-a) 2
-b) -2
+Cuanto es 2+2?
+a) 3
+b) 2
+c) 4
+d) Pez
+
+
+Cuanto es 10+10?
+a) 20
+b) 10
 c) 3
-d) 4
-
-
-2+2?
-a) 3
-b) 4
-c) 5
-d) 6
-
-
-2+2?
-a) 3
-b) 4
-c) 5
-d) 6
+d) 40
 
