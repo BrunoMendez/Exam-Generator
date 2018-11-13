@@ -7,9 +7,8 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BajarExamenesController">
    <children>
-      <ComboBox layoutX="35.0" layoutY="66.0" prefHeight="25.0" prefWidth="576.0" promptText="Nombre" />
-      <Button layoutX="323.0" layoutY="365.0" mnemonicParsing="false" text="Bajar Examen" />
-      <Button layoutX="643.0" layoutY="66.0" mnemonicParsing="false" text="Buscar" />
+      <ComboBox fx:id="comboExamenes" editable="true" layoutX="35.0" layoutY="66.0" prefHeight="25.0" prefWidth="614.0" promptText="Nombre" />
+      <Button layoutX="323.0" layoutY="365.0" mnemonicParsing="false" onAction="#bajar" text="Bajar Examen" />
       <Label layoutX="326.0" layoutY="240.0" prefHeight="17.0" text="Examen Bajado" />
    </children>
 </AnchorPane>
