@@ -167,7 +167,7 @@ public class GenerarExamenController implements Initializable {
             
             // agarra las preguntas de la base de datos
             ArrayList<List<String>> allPreguntas
-                    = datos.getPreguntas(examVariable.getTema(), examVariable.getDificultad(),"");
+                    = datos.getPreguntas(examVariable.getTema(), examVariable.getDificultad(),examVariable.getTipo());
             
             /// **** hasta aqui
             
