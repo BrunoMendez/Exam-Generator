@@ -49,6 +49,8 @@ public class GenerarExamenController implements Initializable {
     private Button addButton;
     @FXML
     private Button generarButton;
+    @FXML
+    private Label label;
 
     // Tabla
     private final ObservableList<ExamVariable> examVariableOL
@@ -106,7 +108,6 @@ public class GenerarExamenController implements Initializable {
         Scene scene = new Scene(root);
         this.stage.setScene(scene);
         this.stage.show();
-
     }
 
     @FXML
@@ -184,10 +185,12 @@ public class GenerarExamenController implements Initializable {
             }
         }
         datos.addExamen(examen.getText(), preguntas);
+        label.setOpacity(1);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        label.setOpacity(0);
         materias = datos.getAllMaterias();
         materiasOL.setAll(materias);
         comboMaterias.setItems(materiasOL);

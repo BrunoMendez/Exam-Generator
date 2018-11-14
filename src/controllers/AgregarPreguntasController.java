@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import application.QuestionData;
 import database.dataBase;
 import java.io.IOException;
 import java.net.URL;
@@ -44,6 +45,8 @@ public class AgregarPreguntasController implements Initializable {
     @FXML
     private Button returnButton;
     @FXML
+    private Button guardarButton;
+    @FXML
     private RadioButton opcion1;
     @FXML
     private RadioButton opcion2;
@@ -71,6 +74,8 @@ public class AgregarPreguntasController implements Initializable {
     private Label textoTipo1;
     @FXML
     private Label textoTipo2;
+    @FXML
+    Label label;
     
     private final ToggleGroup opciones = new ToggleGroup();
     private final ToggleGroup tipo = new ToggleGroup();
@@ -97,6 +102,7 @@ public class AgregarPreguntasController implements Initializable {
     private void goBack(ActionEvent event) 
         throws IOException
     {
+        QuestionData.getInstance().setUp(Boolean.FALSE);
         this.stage = ((Stage)this.returnButton.getScene().getWindow());
         Parent root = (Parent)FXMLLoader.load(getClass()
                 .getResource("/application/Main.fxml"));
@@ -156,33 +162,64 @@ public class AgregarPreguntasController implements Initializable {
     private void guardarPregunta(ActionEvent e)
             throws IOException
     {
-        String ans = "";
-        String stipo = "";
-        if (opciones.getSelectedToggle().equals(opcion1)) {
-            ans = textoOpcion1.getText();
-        } else if (opciones.getSelectedToggle().equals(opcion2)) {
-            ans = textoOpcion2.getText();
-        } else if (opciones.getSelectedToggle().equals(opcion3)) {
-            ans = textoOpcion3.getText();
-        } else if (opciones.getSelectedToggle().equals(opcion4)) {
-            ans = textoOpcion4.getText();
+        if(!QuestionData.getInstance().getUp()){
+            String ans = "";
+            String stipo = "";
+            if (opciones.getSelectedToggle().equals(opcion1)) {
+                ans = textoOpcion1.getText();
+            } else if (opciones.getSelectedToggle().equals(opcion2)) {
+                ans = textoOpcion2.getText();
+            } else if (opciones.getSelectedToggle().equals(opcion3)) {
+                ans = textoOpcion3.getText();
+            } else if (opciones.getSelectedToggle().equals(opcion4)) {
+                ans = textoOpcion4.getText();
+            }
+            if (tipo.getSelectedToggle().equals(tipo1)) {
+                stipo = textoTipo1.getText();
+            } else if (tipo.getSelectedToggle().equals(tipo2)) {
+                stipo = textoTipo2.getText();
+            }
+            datos.addPregunta(comboTemas.getValue(),
+                    comboDificultad.getValue(), pregunta.getText(), 
+                    textoOpcion1.getText(), textoOpcion2.getText(), 
+                    textoOpcion3.getText(), textoOpcion4.getText(), ans,stipo);
         }
-        if (tipo.getSelectedToggle().equals(tipo1)) {
-            stipo = textoTipo1.getText();
-        } else if (tipo.getSelectedToggle().equals(tipo2)) {
-            stipo = textoTipo2.getText();
+        else{
+            String ans = "";
+            String stipo = "";
+            if (opciones.getSelectedToggle().equals(opcion1)) {
+                ans = textoOpcion1.getText();
+            } else if (opciones.getSelectedToggle().equals(opcion2)) {
+                ans = textoOpcion2.getText();
+            } else if (opciones.getSelectedToggle().equals(opcion3)) {
+                ans = textoOpcion3.getText();
+            } else if (opciones.getSelectedToggle().equals(opcion4)) {
+                ans = textoOpcion4.getText();
+            }
+            if (tipo.getSelectedToggle().equals(tipo1)) {
+                stipo = textoTipo1.getText();
+            } else if (tipo.getSelectedToggle().equals(tipo2)) {
+                stipo = textoTipo2.getText();
+            }
+            System.out.println(ans);         
+            datos.updatePregunta(QuestionData.getInstance().getId(),
+                     pregunta.getText(), textoOpcion1.getText(), textoOpcion2.getText(), 
+                    textoOpcion3.getText(), textoOpcion4.getText(),ans,comboDificultad.getValue(),stipo);
+            QuestionData.getInstance().setUp(Boolean.FALSE);
+            this.stage = ((Stage) this.guardarButton.getScene().getWindow());
+            Parent root = (Parent) FXMLLoader.load(getClass().getResource("/application/EditarPreguntas.fxml"));
+            Scene scene = new Scene(root);
+            this.stage.setScene(scene);
+            this.stage.show();
         }
-        datos.addPregunta(comboTemas.getValue(),
-                comboDificultad.getValue(), pregunta.getText(), 
-                textoOpcion1.getText(), textoOpcion2.getText(), 
-                textoOpcion3.getText(), textoOpcion4.getText(), ans,stipo);
+        label.setOpacity(1);
     }
     
     
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // TODO
+        label.setOpacity(0);
         materias = datos.getAllMaterias();
         materiasOL.setAll(materias);
         comboMaterias.setItems(materiasOL);
@@ -191,9 +228,41 @@ public class AgregarPreguntasController implements Initializable {
         opcion3.setToggleGroup(opciones);
         opcion4.setToggleGroup(opciones);
         opciones.selectToggle(opcion1);
+        
         tipo1.setToggleGroup(tipo);
         tipo2.setToggleGroup(tipo);
         tipo.selectToggle(tipo1);
         comboDificultad.setItems(dificultad);
+        
+        if(QuestionData.getInstance().getUp()){
+            comboMaterias.getSelectionModel().select(QuestionData.getInstance().getMateria());
+            comboDificultad.getSelectionModel().select(QuestionData.getInstance().getDif());
+            temasOL.add(QuestionData.getInstance().getTema());
+            comboTemas.setItems(temasOL);
+            comboTemas.getSelectionModel().select(QuestionData.getInstance().getTema());
+            pregunta.setText(QuestionData.getInstance().getDesc());
+            textoOpcion1.setText(QuestionData.getInstance().getOp1());
+            textoOpcion2.setText(QuestionData.getInstance().getOp2());
+            textoOpcion3.setText(QuestionData.getInstance().getOp3());
+            textoOpcion4.setText(QuestionData.getInstance().getOp4());
+            if(QuestionData.getInstance().getTipo().equals("Dinamica")){
+                tipo.selectToggle(tipo1);
+            }
+            else{
+                tipo.selectToggle(tipo2);
+            }
+            if(QuestionData.getInstance().getAns().equals(QuestionData.getInstance().getOp1())){
+            opciones.selectToggle(opcion1);
+            }
+            else if(QuestionData.getInstance().getAns().equals(QuestionData.getInstance().getOp2())){
+                opciones.selectToggle(opcion2);
+            }
+            else if(QuestionData.getInstance().getAns().equals(QuestionData.getInstance().getOp3())){
+                opciones.selectToggle(opcion3);
+            }
+            else if(QuestionData.getInstance().getAns().equals(QuestionData.getInstance().getOp4())){
+                opciones.selectToggle(opcion4);
+            }
+        }
     }
 }
