@@ -170,7 +170,8 @@ public class BajarExamenesController implements Initializable {
         FileWriter fileWriter;
         fileWriter = new FileWriter(file);
         try (PrintWriter printWriter = new PrintWriter(fileWriter)) {
-            printWriter.printf("\t\t%s\r\n", selectedValue);
+            printWriter.printf("\t\t%s\r\n\r\n\r\n", selectedValue);
+            printWriter.print("Nombre:______________________________\t\t\tMatricula:______________________________\r\n");
             preguntas.forEach((pregunta) -> {
                 printWriter.printf("\r\n%s\r\n\r\n", pregunta.get(0));
                 printWriter.printf("a) %s\r\n", pregunta.get(1));
@@ -179,6 +180,7 @@ public class BajarExamenesController implements Initializable {
                 printWriter.printf("d) %s\r\n", pregunta.get(4));
             });
         }
+        label.setText("Examen Bajado");
         label.setOpacity(1);
     }
 
@@ -202,6 +204,8 @@ public class BajarExamenesController implements Initializable {
             i++;
         }
         datos.deleteExamen(Integer.parseInt(examenes.get(i).get(0)));
+        label.setText("Examen Borrado");
+        label.setOpacity(1);
     }
     
     
