@@ -188,12 +188,13 @@ public class GenerarExamenController implements Initializable {
             allPreguntas.forEach((pregunta) -> {
                 allPreguntasDesc.add(pregunta.get(0));
             });
-            // escoge de manera random preguntas, sin repeticiones
+            // escoge de manera random preguntas
             Random rand = new Random();
             for (int i = 0; i < cant; i++) {
                 int randomIndex = rand.nextInt(allPreguntasDesc.size());
                 preguntas.add(allPreguntasDesc.get(randomIndex));
-                if (allPreguntas.size() <= cant) {
+                // Si hay menos cantidad seleccionada que preguntas, no hay repeticiones.
+                if (allPreguntas.size() >= cant) {
                     allPreguntasDesc.remove(randomIndex);
                 }
             }
