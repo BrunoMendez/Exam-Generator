@@ -192,6 +192,17 @@ public class BajarExamenesController implements Initializable {
         this.stage.setScene(scene);
         this.stage.show();
     }
+    @FXML
+    private void borrar(ActionEvent event){
+        String selectedValue;
+        selectedValue = (String) FxUtilTest.getComboBoxValue(comboExamenes);
+        comboExamenes.getItems().remove(selectedValue);
+        int i=0;
+        while(!examenes.get(i).get(1).equals(selectedValue)){
+            i++;
+        }
+        datos.deleteExamen(Integer.parseInt(examenes.get(i).get(0)));
+    }
     
     
     private String getRealOption(String option, ArrayList<String> variables, Map<String, String> varValue, ArrayList<Argument> arguments) {
