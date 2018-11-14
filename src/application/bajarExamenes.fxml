@@ -9,6 +9,7 @@
    <children>
       <ComboBox fx:id="comboExamenes" editable="true" layoutX="35.0" layoutY="66.0" prefHeight="25.0" prefWidth="614.0" promptText="Nombre" />
       <Button layoutX="323.0" layoutY="365.0" mnemonicParsing="false" onAction="#bajar" text="Bajar Examen" />
-      <Label layoutX="326.0" layoutY="240.0" prefHeight="17.0" text="Examen Bajado" />
+      <Label fx:id="label" layoutX="326.0" layoutY="240.0" prefHeight="17.0" text="Examen Bajado!" />
+      <Button fx:id="backButton" layoutX="35.0" layoutY="428.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
    </children>
 </AnchorPane>

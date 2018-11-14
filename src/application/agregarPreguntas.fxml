@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AgregarPreguntasController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AgregarPreguntasController">
    <children>
       <Label layoutX="220.0" layoutY="21.0" text="Agregar Preguntas">
          <font>
@@ -32,7 +32,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="comboMaterias" onAction="#loadTemas" onKeyPressed="#addMateria" promptText="--------------">
+                  <ComboBox fx:id="comboMaterias" onAction="#loadTemas" prefHeight="25.0" prefWidth="110.0" promptText="--------------">
                      <HBox.margin>
                         <Insets left="20.0" right="8.0" />
                      </HBox.margin>
@@ -51,7 +51,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="comboTemas" onKeyPressed="#addTema" promptText="--------------">
+                  <ComboBox fx:id="comboTemas" onKeyPressed="#addTema" prefHeight="25.0" prefWidth="110.0" promptText="--------------">
                      <HBox.margin>
                         <Insets left="20.0" right="8.0" />
                      </HBox.margin>
@@ -70,7 +70,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="comboDificultad" onKeyPressed="#addTema" promptText="--------------">
+                  <ComboBox fx:id="comboDificultad" onKeyPressed="#addTema" prefWidth="110.0" promptText="--------------">
                      <HBox.margin>
                         <Insets left="8.0" right="20.0" />
                      </HBox.margin>

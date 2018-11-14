@@ -35,8 +35,6 @@ public class MainController implements Initializable {
     @FXML
     private Button viewExamButton;
     @FXML
-    private Button editQuestionButton;
-    @FXML
     private Button addQuestionButton;
     
     @FXML
@@ -56,17 +54,6 @@ public class MainController implements Initializable {
     {
         this.stage = ((Stage)this.viewExamButton.getScene().getWindow());
         Parent root = (Parent)FXMLLoader.load(getClass().getResource("/application/bajarExamenes.fxml"));
-        Scene scene = new Scene(root);
-        this.stage.setScene(scene);
-        this.stage.show();
-    }
-    
-    @FXML
-    public void loadEditQuestion(ActionEvent e)
-        throws IOException
-    {
-        this.stage = ((Stage)this.editQuestionButton.getScene().getWindow());
-        Parent root = (Parent)FXMLLoader.load(getClass().getResource("/application/EditarPreguntas.fxml"));
         Scene scene = new Scene(root);
         this.stage.setScene(scene);
         this.stage.show();

@@ -22,7 +22,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -121,20 +120,7 @@ public class AgregarPreguntasController implements Initializable {
     {
         this.comboTemas.setEditable(true);
     }    
-    
-    @FXML
-    private void addMateria(KeyEvent e)
-    {
-        if (e.getCode() == KeyCode.ENTER) {
-            String text = comboMaterias.getEditor().getText();
-            materias.add(text);
-            materiasOL.setAll(materias);
-            comboMaterias.setItems(materiasOL);
-            comboMaterias.setEditable(false);
-            datos.addMateria(text);
-        }
-    }
-    
+        
      @FXML
     private void loadTemas(ActionEvent e) 
             throws IOException
@@ -186,7 +172,6 @@ public class AgregarPreguntasController implements Initializable {
         } else if (tipo.getSelectedToggle().equals(tipo2)) {
             stipo = textoTipo2.getText();
         }
-        System.out.println(ans);
         datos.addPregunta(comboTemas.getValue(),
                 comboDificultad.getValue(), pregunta.getText(), 
                 textoOpcion1.getText(), textoOpcion2.getText(), 

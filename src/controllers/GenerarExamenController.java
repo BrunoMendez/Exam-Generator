@@ -24,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.mariuszgromada.math.mxparser.*;
 
 /**
  *
@@ -127,9 +128,7 @@ public class GenerarExamenController implements Initializable {
     private void loadTipo(ActionEvent e)
             throws IOException {
         tipo = datos.getAllTipoP(comboTemas.getValue(),comboDificultades.getValue());
-        System.out.println(tipo.toString());
         tipoOL.setAll(tipo);
-        System.out.println(tipoOL.toString());
         comboTipo.setItems(tipoOL);
     }
 
@@ -169,9 +168,6 @@ public class GenerarExamenController implements Initializable {
             ArrayList<List<String>> allPreguntas
                     = datos.getPreguntas(examVariable.getTema(), examVariable.getDificultad(),examVariable.getTipo());
             
-            /// **** hasta aqui
-            
-            
             if (allPreguntas.size() >= cant) {
                 // Saca la descripcion de las preguntas y las mete a una nueva lista
                 ArrayList<String> allPreguntasDesc = new ArrayList<>();
@@ -185,10 +181,9 @@ public class GenerarExamenController implements Initializable {
                     preguntas.add(allPreguntasDesc.get(randomIndex));
                     allPreguntasDesc.remove(randomIndex);
                 }
-                datos.addExamen(examen.getText(), preguntas);
-                System.out.println(datos.getAllExamenes().toString());
             }
         }
+        datos.addExamen(examen.getText(), preguntas);
     }
 
     @Override
