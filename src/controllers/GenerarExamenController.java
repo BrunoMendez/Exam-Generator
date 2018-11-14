@@ -8,6 +8,7 @@ package controllers;
 import database.dataBase;
 import java.util.*;
 import application.ExamVariable;
+import application.QuestionData;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -104,6 +105,7 @@ public class GenerarExamenController implements Initializable {
     @FXML
     private void abrirAgregarPregunta(ActionEvent event)
             throws IOException {
+        QuestionData.getInstance().setGen(Boolean.TRUE);
         this.stage = ((Stage) this.agregarPreguntaButton.getScene().getWindow());
         Parent root = (Parent) FXMLLoader.load(getClass().getResource("/application/agregarPreguntas.fxml"));
         Scene scene = new Scene(root);
