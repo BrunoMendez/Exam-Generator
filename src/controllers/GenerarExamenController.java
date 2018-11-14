@@ -153,7 +153,7 @@ public class GenerarExamenController implements Initializable {
         String tema = comboTemas.getValue();
         String dificultad = comboDificultades.getValue();
         String tipo = comboTipo.getValue();
-        if (cant < datos.getPreguntas(tema, dificultad, tipo).size() && tipo.equals("Estatica")) {
+        if ((cant <= datos.getPreguntas(tema, dificultad, tipo).size() && tipo.equals("Estatica") || tipo.equals("Dinamica"))) {
             if (labelCant.getOpacity() == 1) {
                 labelCant.setOpacity(0);
             }
