@@ -111,8 +111,16 @@ public class AgregarPreguntasController implements Initializable {
             this.stage.setScene(scene);
             this.stage.show();
         }
-        else{
+        else if(QuestionData.getInstance().getUp()){
             QuestionData.getInstance().setUp(Boolean.FALSE);
+            this.stage = ((Stage)this.returnButton.getScene().getWindow());
+            Parent root = (Parent)FXMLLoader.load(getClass()
+                    .getResource("/application/EditarPregunta.fxml"));
+            Scene scene = new Scene(root);
+            this.stage.setScene(scene);
+            this.stage.show();
+        }
+        else{
             this.stage = ((Stage)this.returnButton.getScene().getWindow());
             Parent root = (Parent)FXMLLoader.load(getClass()
                     .getResource("/application/Main.fxml"));
