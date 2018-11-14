@@ -33,6 +33,7 @@ public class QuestionData {
     private String op4= "";
     private String ans="";
     private Boolean up= false;
+    private Boolean gen= false;
     private int id = 0;
 
 
@@ -122,6 +123,13 @@ public class QuestionData {
     // FUNCTIONS - getter/setters
     public int getId() {
         return id;
+    }
+    public void setGen(Boolean t) {
+        gen = t;
+    }
+    // FUNCTIONS - getter/setters
+    public Boolean getGen() {
+        return gen;
     }
     
     

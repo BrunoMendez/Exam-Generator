@@ -102,13 +102,32 @@ public class AgregarPreguntasController implements Initializable {
     private void goBack(ActionEvent event) 
         throws IOException
     {
-        QuestionData.getInstance().setUp(Boolean.FALSE);
-        this.stage = ((Stage)this.returnButton.getScene().getWindow());
-        Parent root = (Parent)FXMLLoader.load(getClass()
-                .getResource("/application/Main.fxml"));
-        Scene scene = new Scene(root);
-        this.stage.setScene(scene);
-        this.stage.show();
+        if(QuestionData.getInstance().getGen()){
+            QuestionData.getInstance().setGen(Boolean.FALSE);
+            this.stage = ((Stage)this.returnButton.getScene().getWindow());
+            Parent root = (Parent)FXMLLoader.load(getClass()
+                    .getResource("/application/generarExamen.fxml"));
+            Scene scene = new Scene(root);
+            this.stage.setScene(scene);
+            this.stage.show();
+        }
+        else if(QuestionData.getInstance().getUp()){
+            QuestionData.getInstance().setUp(Boolean.FALSE);
+            this.stage = ((Stage)this.returnButton.getScene().getWindow());
+            Parent root = (Parent)FXMLLoader.load(getClass()
+                    .getResource("/application/EditarPregunta.fxml"));
+            Scene scene = new Scene(root);
+            this.stage.setScene(scene);
+            this.stage.show();
+        }
+        else{
+            this.stage = ((Stage)this.returnButton.getScene().getWindow());
+            Parent root = (Parent)FXMLLoader.load(getClass()
+                    .getResource("/application/Main.fxml"));
+            Scene scene = new Scene(root);
+            this.stage.setScene(scene);
+            this.stage.show();
+        }
     }
     @FXML
     private void editMaterias(ActionEvent event)
