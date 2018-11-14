@@ -51,6 +51,8 @@ public class GenerarExamenController implements Initializable {
     private Button generarButton;
     @FXML
     private Label label;
+    @FXML
+    private Label labelCant;
 
     // Tabla
     private final ObservableList<ExamVariable> examVariableOL
@@ -67,7 +69,6 @@ public class GenerarExamenController implements Initializable {
     private TableColumn<ExamVariable, String> cantidadCol;
     @FXML
     private TableColumn<ExamVariable, String> tipoCol;
-
 
     // Preguntas para generar examenes
     @FXML
@@ -99,7 +100,7 @@ public class GenerarExamenController implements Initializable {
     ArrayList<String> tipo = new ArrayList<>();
     private final ObservableList<String> tipoOL
             = FXCollections.observableArrayList(tipo);
-    
+
     @FXML
     private void abrirAgregarPregunta(ActionEvent event)
             throws IOException {
@@ -125,10 +126,11 @@ public class GenerarExamenController implements Initializable {
         dificultadesOL.setAll(dificultades);
         comboDificultades.setItems(dificultadesOL);
     }
+
     @FXML
     private void loadTipo(ActionEvent e)
             throws IOException {
-        tipo = datos.getAllTipoP(comboTemas.getValue(),comboDificultades.getValue());
+        tipo = datos.getAllTipoP(comboTemas.getValue(), comboDificultades.getValue());
         tipoOL.setAll(tipo);
         comboTipo.setItems(tipoOL);
     }
@@ -146,11 +148,22 @@ public class GenerarExamenController implements Initializable {
     @FXML
     private void agregarPregunta(ActionEvent event)
             throws IOException {
-        examVariableOL.add(new ExamVariable(comboMaterias.getValue(),
-                comboTemas.getValue(), comboDificultades.getValue(),
-                cantidad.getText(),comboTipo.getValue()));
-        examVariableTable.setEditable(true);
-        examVariableTable.setItems(examVariableOL);
+        int cant = Integer.parseInt(cantidad.getText());
+        String materia = comboMaterias.getValue();
+        String tema = comboTemas.getValue();
+        String dificultad = comboDificultades.getValue();
+        String tipo = comboTipo.getValue();
+        if (cant < datos.getPreguntas(tema, dificultad, tipo).size() && tipo.equals("Estatica")) {
+            if (labelCant.getOpacity() == 1) {
+                labelCant.setOpacity(0);
+            }
+            examVariableOL.add(new ExamVariable(materia, tema, dificultad,
+                    cantidad.getText(), tipo));
+            examVariableTable.setEditable(true);
+            examVariableTable.setItems(examVariableOL);
+        } else {
+            labelCant.setOpacity(1);
+        }
     }
 
     @FXML
@@ -164,22 +177,21 @@ public class GenerarExamenController implements Initializable {
             throws IOException {
         for (ExamVariable examVariable : examVariableOL) {
             int cant = Integer.parseInt(examVariable.getCantidad());
-            
+
             // agarra las preguntas de la base de datos
             ArrayList<List<String>> allPreguntas
-                    = datos.getPreguntas(examVariable.getTema(), examVariable.getDificultad(),examVariable.getTipo());
-            
-            if (allPreguntas.size() >= cant) {
-                // Saca la descripcion de las preguntas y las mete a una nueva lista
-                ArrayList<String> allPreguntasDesc = new ArrayList<>();
-                allPreguntas.forEach((pregunta) -> {
-                    allPreguntasDesc.add(pregunta.get(0));
-                });
-                // escoge de manera random preguntas, sin repeticiones
-                Random rand = new Random();
-                for (int i = 0; i < cant; i++) {
-                    int randomIndex = rand.nextInt(allPreguntasDesc.size());
-                    preguntas.add(allPreguntasDesc.get(randomIndex));
+                    = datos.getPreguntas(examVariable.getTema(), examVariable.getDificultad(), examVariable.getTipo());
+            // Saca la descripcion de las preguntas y las mete a una nueva lista
+            ArrayList<String> allPreguntasDesc = new ArrayList<>();
+            allPreguntas.forEach((pregunta) -> {
+                allPreguntasDesc.add(pregunta.get(0));
+            });
+            // escoge de manera random preguntas, sin repeticiones
+            Random rand = new Random();
+            for (int i = 0; i < cant; i++) {
+                int randomIndex = rand.nextInt(allPreguntasDesc.size());
+                preguntas.add(allPreguntasDesc.get(randomIndex));
+                if (allPreguntas.size() <= cant) {
                     allPreguntasDesc.remove(randomIndex);
                 }
             }
@@ -191,6 +203,7 @@ public class GenerarExamenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         label.setOpacity(0);
+        labelCant.setOpacity(0);
         materias = datos.getAllMaterias();
         materiasOL.setAll(materias);
         comboMaterias.setItems(materiasOL);
