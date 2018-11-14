@@ -207,7 +207,7 @@ public class AgregarPreguntasController implements Initializable {
                     textoOpcion3.getText(), textoOpcion4.getText(),ans,comboDificultad.getValue(),stipo);
             QuestionData.getInstance().setUp(Boolean.FALSE);
             this.stage = ((Stage) this.guardarButton.getScene().getWindow());
-            Parent root = (Parent) FXMLLoader.load(getClass().getResource("/application/EditarPreguntas.fxml"));
+            Parent root = (Parent) FXMLLoader.load(getClass().getResource("/application/EditarPregunta.fxml"));
             Scene scene = new Scene(root);
             this.stage.setScene(scene);
             this.stage.show();
