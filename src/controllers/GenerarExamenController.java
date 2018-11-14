@@ -105,7 +105,6 @@ public class GenerarExamenController implements Initializable {
         Scene scene = new Scene(root);
         this.stage.setScene(scene);
         this.stage.show();
-
     }
 
     @FXML

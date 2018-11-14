@@ -47,7 +47,9 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-        String state = "SELECT DISTINCT t.nombre FROM temas AS t INNER JOIN materias AS m ON t.materia_ID=m.materiaID WHERE m.nombre = '" + materia + "'";
+        String state = "SELECT DISTINCT t.nombre FROM temas "
+                + "AS t INNER JOIN materias AS m ON t.materia_ID=m.materiaID"
+                + " WHERE m.nombre = '" + materia + "'";
         ResultSet rset = stmt.executeQuery(state);
         subj = new ArrayList<String>();
         while(rset.next()) {
@@ -68,7 +70,9 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-        String state = "SELECT DISTINCT p.dificultad FROM preguntas AS p INNER JOIN temas AS t ON p.tema_ID=t.temaId Where t.nombre = '"+tema+"'";
+        String state = "SELECT DISTINCT p.dificultad FROM "
+                + "preguntas AS p INNER JOIN temas AS t "
+                + "ON p.tema_ID=t.temaId Where t.nombre = '"+tema+"'";
         ResultSet rset = stmt.executeQuery(state);
         subj = new ArrayList<String>();
         while(rset.next()) {
@@ -79,6 +83,44 @@ public class dataBase{
         ex.printStackTrace();
       }
       return subj;
+    }
+    public ArrayList<List<String>> getAllPreguntasEditar(){
+        ArrayList<List<String>> preguntas = new ArrayList<List<String>>();         
+        try (
+         // Step 1: Allocate a database 'Connection' object
+         Connection conn = DriverManager.getConnection(address,"root","proyecto");
+               // MySQL: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+ 
+         // Step 2: Allocate a 'Statement' object in the Connection
+         Statement stmt = conn.createStatement();
+      ){
+        String state = "SELECT descripcion,dificultad,tipo,t.nombre,m.nombre,o1,o2,o3,o4,ans,Id FROM "
+                + "preguntas AS p INNER JOIN temas AS t ON p.tema_ID=t.temaId "
+                + "INNER JOIN materias AS m ON t.materia_ID = m.materiaID";
+        ResultSet rset = stmt.executeQuery(state);
+        
+        int i=0;
+        while(rset.next()) {
+           preguntas.add(new ArrayList<String>());
+           preguntas.get(i).add(rset.getString("descripcion"));
+           preguntas.get(i).add(rset.getString("m.nombre"));
+           preguntas.get(i).add(rset.getString("t.nombre"));
+           preguntas.get(i).add(rset.getString("dificultad"));
+           preguntas.get(i).add(rset.getString("tipo"));
+           preguntas.get(i).add(rset.getString("o1"));
+           preguntas.get(i).add(rset.getString("o2"));
+           preguntas.get(i).add(rset.getString("o3"));
+           preguntas.get(i).add(rset.getString("o4"));
+           preguntas.get(i).add(rset.getString("ans"));
+           preguntas.get(i).add(rset.getString("ID"));
+           
+           i++;
+        }
+      }
+      catch(SQLException ex){
+        ex.printStackTrace();
+      }
+      return preguntas;
     }
     public void addMateria(String materia){
         try (
@@ -152,7 +194,9 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-        String state = "SELECT DISTINCT m.nombre FROM preguntas AS p INNER JOIN temas AS t ON p.tema_ID=t.temaId INNER JOIN materias AS m ON t.materia_ID = m.materiaID";
+        String state = "SELECT DISTINCT m.nombre FROM preguntas AS p"
+                + " INNER JOIN temas AS t ON p.tema_ID=t.temaId "
+                + "INNER JOIN materias AS m ON t.materia_ID = m.materiaID";
         ResultSet rset = stmt.executeQuery(state);
         subj = new ArrayList<String>();
         while(rset.next()) {
@@ -173,7 +217,9 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-        String state = "SELECT DISTINCT t.nombre FROM preguntas AS p INNER JOIN temas AS t ON p.tema_ID=t.temaId INNER JOIN materias AS m ON t.materia_ID = m.materiaID WHERE m.nombre = '"+materia+"'";
+        String state = "SELECT DISTINCT t.nombre FROM preguntas AS p "
+                + "INNER JOIN temas AS t ON p.tema_ID=t.temaId "
+                + "INNER JOIN materias AS m ON t.materia_ID = m.materiaID WHERE m.nombre = '"+materia+"'";
         ResultSet rset = stmt.executeQuery(state);
         subj = new ArrayList<String>();
         while(rset.next()) {
@@ -258,7 +304,7 @@ public class dataBase{
          // Step 2: Allocate a 'Statement' object in the Connection
          Statement stmt = conn.createStatement();
       ){
-         String strUpdate = "update preguntas set descripcion ='"+descripcion+"', dificultad = '"+diff+"',op1 ='"+op1+"',op2 ='"+op2+"',op3 ='"+op3+"',op4 ='"+op4+"',ans ='"+ans+"',tipo ='"+tipo+"' where id ="+id;
+         String strUpdate = "update preguntas set descripcion ='"+descripcion+"', dificultad = '"+diff+"',o1 ='"+op1+"',o2 ='"+op2+"',o3 ='"+op3+"',o4 ='"+op4+"',ans ='"+ans+"',tipo ='"+tipo+"' where ID ="+id;
          int countUpdated = stmt.executeUpdate(strUpdate);
       }
       catch(SQLException ex){
